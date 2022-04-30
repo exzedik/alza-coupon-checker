@@ -13,6 +13,7 @@ import time
 attempts = 0
 hits = 0
 cpm = 0
+cps = 0
 # To prevent bot verification
 headers = {
     "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.4951.41 Safari/537.36"
@@ -31,13 +32,13 @@ class Spammer(Thread):
                         global hits
                         attempts += 1
                         print(f'{Fore.RED}[-]{Fore.RESET} Invalid coupon: {CODE} {Fore.YELLOW}[{attempts}]{Fore.RESET}')
-                        os.system(f'title Checked: {attempts} Hits: {hits} CPM: {cpm}')
+                        os.system(f'title Checked: {attempts} Hits: {hits} CPM: {cpm} ({cps})')
                         continue
                     else:
                         attempts += 1
                         hits += 1
                         print(f'{Fore.GREEN}[!!!] VALID COUPON: {CODE}{Fore.RESET}')
-                        os.system(f'title Checked: {attempts} Hits: {hits} CPM: {cpm}')
+                        os.system(f'title Checked: {attempts} Hits: {hits} CPM: {cpm} ({cps})')
                         f = open('hits.txt', 'a')
                         f.write(f'{CODE} ')
                         f.close()
@@ -52,12 +53,13 @@ def main():
 		new_spammer.start()
 		threads.append(new_spammer)
 def cpm():
-            global cpm
+            global cpm, cps
             while True:
                 oldchecked = attempts
                 time.sleep(1)
                 newchecked = attempts
                 cpm = (newchecked - oldchecked) * 60
+                cps = newchecked - oldchecked
 Thread(target=cpm).start()
 print("""
        _                    
